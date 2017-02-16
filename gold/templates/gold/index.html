@@ -1,0 +1,49 @@
+<style>
+table, th, td {
+    border: 3px solid black;
+    border-collapse: collapse;
+}
+</style>
+<body bgcolor="orange">
+<br>
+<br>
+
+<table align="center" style="width:100%">
+<tr style="font-size:28px">
+    <th>รายรับ</th>
+    <th>จำนวนเงิน</th> 
+    <th>ยอดคงเหลือ</th>
+    <th>วัน / เดือน / ปี</th>
+</tr>
+{% if latest_income_list %}
+   {% for income in latest_income_list  %}
+   {% if income.income_text != "" %} 
+   	<tr style="background-color:green;" align="center" ><td style="font-size:28px;">{{ income.income_text }}</td>
+        <td style="font-size:28px;">{{ income.money_in_text }}</td>
+        <td style="font-size:28px;">{{  income.remaining }}</td>
+        <td style="font-size:28px;">{{ income.pub_date }}</td></tr> 
+{% elif income.income_text == "" %}
+   <tr style="background-color:red;" align="center" ><td style="font-size:28px;">{{ income.expenses_text }}</td> 
+   <td style="font-size:28px;">{{ income.money_out_text }}</td>
+   <td style="font-size:28px;">{{  income.remaining }}</td>
+   <td style="font-size:28px;">{{ income.pub_date }}</td></tr>
+    {% endif %}
+   {% endfor %}
+{% endif %}
+</table>
+<br>
+ <form action="{% url 'gold:history' %}" method="post">
+     {% csrf_token %}
+     <input type="submit" value="ประวัติ">
+</form>
+ <form action="{% url 'gold:add_the_income' %}" method="post">
+     {% csrf_token %}
+       <input type="radio" name="bank" value="in"><b style="font-size:20px;"> รายรับ<br></b>
+       <input type="radio" name="bank" value="out" ><b style="font-size:20px;"> รายจ่าย<br></b> 
+       <input type="text" name="add_income">
+        <p><b style="font-size:20px;">จำนวนเงิน</p></b>
+       <input type="text" name="add_money"><br>
+<br>
+    <input type="submit" value="เพิ่ม">
+    </form>
+</body>
